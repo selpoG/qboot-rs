@@ -5,7 +5,7 @@ use std::io::stdin;
 use std::io::{stdout, Write};
 
 use qboot::algebra::matrix::Vector;
-use qboot::mp::real::Real;
+use qboot::mp::real::{Real, ULong};
 
 macro_rules! prompt {
     ($($arg:tt)*) => (print!($($arg)*); stdout().flush().unwrap());
@@ -20,8 +20,8 @@ fn cin<T: std::str::FromStr>() -> T {
 fn main() {
 	let mut t = Real::from(1.0);
 	let mut s_d = Real::from(1.0);
-	for i in 1..=100_u32 {
-		t *= i as u64;
+	for i in 1..=100 {
+		t *= i as ULong;
 		s_d += &t.recip();
 	}
 	println!("Sum is {}", s_d);
@@ -39,7 +39,7 @@ fn main() {
 	for i in 0..3 {
 		v.arr[i] = Vector::new(2);
 		for j in 0..2 {
-			v.arr[i].arr[j] = Real::from((i + j) as u64);
+			v.arr[i].arr[j] = Real::from((i + j) as ULong);
 		}
 	}
 	println!("2 * {} = {}", v, &v + &v);
