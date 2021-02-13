@@ -1,0 +1,22 @@
+# -*- coding:utf-8-unix -*-
+
+[package]
+name = "qboot"
+version = "0.1.0"
+authors = ["selpo <planet_selpo@yahoo.co.jp>"]
+edition = "2018"
+
+[lib]
+name = "qboot"
+path = "src/lib.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[dependencies]
+
+once_cell = "=1.5.2"
+
+[dev-dependencies]
+cli_test_dir = "0.1.7"
