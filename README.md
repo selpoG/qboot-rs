@@ -4,6 +4,7 @@
   - [What's this?](#whats-this)
   - [Requirements](#requirements)
   - [Setup](#setup)
+  - [About license](#about-license)
 
 ## What's this?
 
@@ -29,3 +30,11 @@ Rewrite [qboot](https://github.com/selpoG/qboot) in `Rust`.
 
 On Windows, use `mpir` instead of `gmp`, and `xxx.lib` instead of `libxxx.a`.
 If you use `Powershell`, you can set environment variables by `$env:RUSTFLAGS = "-lmpir -lmpfr"`.
+
+## About license
+
+The source code in this repository is under [LICENSE](/LICENSE),
+but if you link `gmp` or `mpfr`, you need to follow their licenses.
+
+このリポジトリに含まれるソースコードには [LICENSE](/LICENSE) が適用されますが,
+`gmp` や `mpfr` をリンクする場合にはそれらのライセンスに従う必要があります.
