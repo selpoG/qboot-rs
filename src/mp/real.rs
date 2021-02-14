@@ -40,43 +40,43 @@ pub fn set_rnd(rnd: RoundMode) -> Result<(), &'static str> {
 }
 
 pub struct Real {
-	pub data: mpfr::mpfr_t,
+	pub data: mpfr::__mpfr_struct,
 }
 
 impl Real {
 	fn _nan() -> Real {
-		let mut x: mpfr::mpfr_t = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
+		let mut x: mpfr::__mpfr_struct = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
 		unsafe {
-			mpfr::mpfr_init2(&mut x[0], _GLOBAL_PREC);
+			mpfr::mpfr_init2(&mut x, _GLOBAL_PREC);
 		}
 		Real { data: x }
 	}
 	pub fn new() -> Real {
 		let mut x = Real::_nan();
 		unsafe {
-			mpfr::mpfr_set_zero(&mut x.data[0], 1);
+			mpfr::mpfr_set_zero(&mut x.data, 1);
 		}
 		x
 	}
 	pub fn reset(&mut self) {
-		if !self.data[0]._mpfr_d.is_null() {
-			unsafe { mpfr::mpfr_clear(&mut self.data[0]) }
+		if !self.data._mpfr_d.is_null() {
+			unsafe { mpfr::mpfr_clear(&mut self.data) }
 		}
-		self.data[0]._mpfr_d = std::ptr::null_mut();
+		self.data._mpfr_d = std::ptr::null_mut();
 	}
 	pub fn sgn(&self) -> mpfr::mpfr_int {
-		unsafe { mpfr::mpfr_sgn(&self.data[0]) }
+		unsafe { mpfr::mpfr_sgn(&self.data) }
 	}
 	pub fn isnan(&self) -> bool {
-		unsafe { mpfr::mpfr_nan_p(&self.data[0]) != 0 }
+		unsafe { mpfr::mpfr_nan_p(&self.data) != 0 }
 	}
 	pub fn isinf(&self) -> bool {
-		unsafe { mpfr::mpfr_inf_p(&self.data[0]) != 0 }
+		unsafe { mpfr::mpfr_inf_p(&self.data) != 0 }
 	}
 	pub fn recip(&self) -> Real {
 		let mut x = Real::_nan();
 		unsafe {
-			mpfr::mpfr_ui_div(&mut x.data[0], 1 as ULong, &self.data[0], _GLOBAL_RND);
+			mpfr::mpfr_ui_div(&mut x.data, 1 as ULong, &self.data, _GLOBAL_RND);
 		}
 		x
 	}
@@ -90,7 +90,7 @@ impl std::str::FromStr for Real {
 		let c_str = CString::new(s).expect("CString::new failed");
 		let mut x = Real::_nan();
 		unsafe {
-			match mpfr::mpfr_set_str(&mut x.data[0], c_str.as_ptr(), 10, _GLOBAL_RND) {
+			match mpfr::mpfr_set_str(&mut x.data, c_str.as_ptr(), 10, _GLOBAL_RND) {
 				-1 => Err(()),
 				_ => Ok(x),
 			}
@@ -102,7 +102,7 @@ impl From<f32> for Real {
 	fn from(from: f32) -> Real {
 		let mut x = Real::_nan();
 		unsafe {
-			mpfr::mpfr_set_flt(&mut x.data[0], from, _GLOBAL_RND);
+			mpfr::mpfr_set_flt(&mut x.data, from, _GLOBAL_RND);
 		}
 		x
 	}
@@ -111,7 +111,7 @@ impl From<f64> for Real {
 	fn from(from: f64) -> Real {
 		let mut x = Real::_nan();
 		unsafe {
-			mpfr::mpfr_set_d(&mut x.data[0], from, _GLOBAL_RND);
+			mpfr::mpfr_set_d(&mut x.data, from, _GLOBAL_RND);
 		}
 		x
 	}
@@ -121,7 +121,7 @@ impl From<Long> for Real {
 	fn from(from: Long) -> Real {
 		let mut x = Real::_nan();
 		unsafe {
-			mpfr::mpfr_set_si(&mut x.data[0], from, _GLOBAL_RND);
+			mpfr::mpfr_set_si(&mut x.data, from, _GLOBAL_RND);
 		}
 		x
 	}
@@ -130,7 +130,7 @@ impl From<ULong> for Real {
 	fn from(from: ULong) -> Real {
 		let mut x = Real::_nan();
 		unsafe {
-			mpfr::mpfr_set_ui(&mut x.data[0], from, _GLOBAL_RND);
+			mpfr::mpfr_set_ui(&mut x.data, from, _GLOBAL_RND);
 		}
 		x
 	}
@@ -138,8 +138,8 @@ impl From<ULong> for Real {
 
 impl Drop for Real {
 	fn drop(&mut self) {
-		if !self.data[0]._mpfr_d.is_null() {
-			unsafe { mpfr::mpfr_clear(&mut self.data[0]) }
+		if !self.data._mpfr_d.is_null() {
+			unsafe { mpfr::mpfr_clear(&mut self.data) }
 		}
 	}
 }
@@ -150,7 +150,7 @@ impl Add for Real {
 	fn add(self, rhs: Real) -> Real {
 		let mut x = Real::new();
 		unsafe {
-			mpfr::mpfr_add(&mut x.data[0], &self.data[0], &rhs.data[0], _GLOBAL_RND);
+			mpfr::mpfr_add(&mut x.data, &self.data, &rhs.data, _GLOBAL_RND);
 		}
 		x
 	}
@@ -160,7 +160,7 @@ impl Clone for Real {
 	fn clone(&self) -> Real {
 		let mut x = Real::_nan();
 		unsafe {
-			mpfr::mpfr_set(&mut x.data[0], &self.data[0], _GLOBAL_RND);
+			mpfr::mpfr_set(&mut x.data, &self.data, _GLOBAL_RND);
 		}
 		x
 	}
@@ -170,12 +170,12 @@ impl Ring for Real {
 		Real::new()
 	}
 	fn iszero(&self) -> bool {
-		unsafe { mpfr::mpfr_zero_p(&self.data[0]) != 0 }
+		unsafe { mpfr::mpfr_zero_p(&self.data) != 0 }
 	}
 	fn _add(&self, rhs: &Self) -> Self {
 		let mut x = Real::new();
 		unsafe {
-			mpfr::mpfr_add(&mut x.data[0], &self.data[0], &rhs.data[0], _GLOBAL_RND);
+			mpfr::mpfr_add(&mut x.data, &self.data, &rhs.data, _GLOBAL_RND);
 		}
 		x
 	}
@@ -192,7 +192,7 @@ impl Add for &Real {
 impl AddAssign<&Real> for Real {
 	fn add_assign(&mut self, rhs: &Real) {
 		unsafe {
-			mpfr::mpfr_add(&mut self.data[0], &self.data[0], &rhs.data[0], _GLOBAL_RND);
+			mpfr::mpfr_add(&mut self.data, &self.data, &rhs.data, _GLOBAL_RND);
 		}
 	}
 }
@@ -200,7 +200,7 @@ impl AddAssign<&Real> for Real {
 impl MulAssign<&Real> for Real {
 	fn mul_assign(&mut self, rhs: &Real) {
 		unsafe {
-			mpfr::mpfr_mul(&mut self.data[0], &self.data[0], &rhs.data[0], _GLOBAL_RND);
+			mpfr::mpfr_mul(&mut self.data, &self.data, &rhs.data, _GLOBAL_RND);
 		}
 	}
 }
@@ -208,7 +208,7 @@ impl MulAssign<&Real> for Real {
 impl MulAssign<ULong> for Real {
 	fn mul_assign(&mut self, rhs: ULong) {
 		unsafe {
-			mpfr::mpfr_mul_ui(&mut self.data[0], &self.data[0], rhs, _GLOBAL_RND);
+			mpfr::mpfr_mul_ui(&mut self.data, &self.data, rhs, _GLOBAL_RND);
 		}
 	}
 }
@@ -239,14 +239,14 @@ impl fmt::Display for Real {
 				let sgn = x.sgn();
 				let neg = sgn < 0;
 				if neg {
-					mpfr::mpfr_neg(&mut x.data[0], &x.data[0], _GLOBAL_RND);
+					mpfr::mpfr_neg(&mut x.data, &x.data, _GLOBAL_RND);
 				}
 				let ch = mpfr::mpfr_get_str(
 					std::ptr::null_mut(),
 					exp_ptr,
 					base,
 					prec,
-					&x.data[0],
+					&x.data,
 					_GLOBAL_RND,
 				);
 				if ch == std::ptr::null_mut() {

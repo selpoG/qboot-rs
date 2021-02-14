@@ -3,29 +3,29 @@ use super::bindings::gmp;
 use std::ops::Add;
 
 pub struct Integer {
-	pub data: gmp::mpz_t,
+	pub data: gmp::__mpz_struct,
 }
 
 impl Integer {
 	pub fn new() -> Integer {
-		let mut x: gmp::mpz_t = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
+		let mut x: gmp::__mpz_struct = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
 		unsafe {
-			gmp::__gmpz_init(&mut x[0]);
+			gmp::__gmpz_init(&mut x);
 		}
 		Integer { data: x }
 	}
 	pub fn reset(&mut self) {
-		if !self.data[0]._mp_d.is_null() {
-			unsafe { gmp::__gmpz_clear(&mut self.data[0]) }
+		if !self.data._mp_d.is_null() {
+			unsafe { gmp::__gmpz_clear(&mut self.data) }
 		}
-		self.data[0]._mp_d = std::ptr::null_mut();
+		self.data._mp_d = std::ptr::null_mut();
 	}
 }
 
 impl Drop for Integer {
 	fn drop(&mut self) {
-		if !self.data[0]._mp_d.is_null() {
-			unsafe { gmp::__gmpz_clear(&mut self.data[0]) }
+		if !self.data._mp_d.is_null() {
+			unsafe { gmp::__gmpz_clear(&mut self.data) }
 		}
 	}
 }
@@ -36,7 +36,7 @@ impl Add for Integer {
 	fn add(self, rhs: Integer) -> Integer {
 		let mut x = Integer::new();
 		unsafe {
-			gmp::__gmpz_add(&mut x.data[0], &self.data[0], &rhs.data[0]);
+			gmp::__gmpz_add(&mut x.data, &self.data, &rhs.data);
 		}
 		x
 	}
