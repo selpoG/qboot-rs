@@ -12,35 +12,35 @@ macro_rules! prompt {
 }
 
 fn cin<T: std::str::FromStr>() -> T {
-	let mut s = String::new();
-	stdin().read_line(&mut s).ok();
-	s.trim().parse::<T>().ok().unwrap()
+    let mut s = String::new();
+    stdin().read_line(&mut s).ok();
+    s.trim().parse::<T>().ok().unwrap()
 }
 
 fn main() {
-	let mut t = Real::from(1.0);
-	let mut s_d = Real::from(1.0);
-	for i in 1..=100 {
-		t *= i as ULong;
-		s_d += t.recip();
-	}
-	println!("Sum is {}", s_d);
+    let mut t = Real::from(1.0);
+    let mut s_d = Real::from(1.0);
+    for i in 1..=100 {
+        t *= i as ULong;
+        s_d += t.recip();
+    }
+    println!("Sum is {}", s_d);
 
-	let v: Vector<Real> = Vector::new(3);
-	println!("{} + {} = {}", v, v, &v + &v);
+    let v: Vector<Real> = Vector::new(3);
+    println!("{} + {} = {}", v, v, &v + &v);
 
-	prompt!("a = ");
-	let a: Real = cin();
-	prompt!("b = ");
-	let b: Real = cin();
-	println!("{} + {} = {}", a, b, &a + &b);
+    prompt!("a = ");
+    let a: Real = cin();
+    prompt!("b = ");
+    let b: Real = cin();
+    println!("{} + {} = {}", a, b, &a + &b);
 
-	let mut v: Vector<Vector<Real>> = Vector::new(3);
-	for i in 0..3 {
-		v.arr[i] = Vector::new(2);
-		for j in 0..2 {
-			v.arr[i].arr[j] = Real::from((i + j) as ULong);
-		}
-	}
-	println!("2 * {} = {}", v, &v + &v);
+    let mut v: Vector<Vector<Real>> = Vector::new(3);
+    for i in 0..3 {
+        v.arr[i] = Vector::new(2);
+        for j in 0..2 {
+            v.arr[i].arr[j] = Real::from((i + j) as ULong);
+        }
+    }
+    println!("2 * {} = {}", v, &v + &v);
 }
