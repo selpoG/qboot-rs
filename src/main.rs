@@ -22,7 +22,7 @@ fn main() {
 	let mut s_d = Real::from(1.0);
 	for i in 1..=100 {
 		t *= i as ULong;
-		s_d += &t.recip();
+		s_d += t.recip();
 	}
 	println!("Sum is {}", s_d);
 
