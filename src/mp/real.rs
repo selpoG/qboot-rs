@@ -8,6 +8,8 @@ pub type Precision = mpfr::mpfr_prec_t;
 pub type RoundMode = mpfr::mpfr_rnd_t;
 pub type ULong = mpfr::mpfr_ulong;
 pub type Long = mpfr::mpfr_long;
+pub type UIntMax = mpfr::uintmax_t;
+pub type IntMax = mpfr::intmax_t;
 
 // _GLOBAL_PREC, _GLOBAL_RND を複数回書き換えられるようにする
 static _PREC_SET: OnceCell<bool> = OnceCell::new();
