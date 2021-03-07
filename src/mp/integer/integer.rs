@@ -1,4 +1,4 @@
-use super::bindings::gmp;
+use super::gmp;
 
 use std::ops::Add;
 
