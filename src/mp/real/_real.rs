@@ -1,4 +1,4 @@
-use super::bindings::mpfr;
+use super::mpfr;
 
 use super::real::{Real, _GLOBAL_PREC};
 

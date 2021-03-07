@@ -1,10 +1,10 @@
-use super::bindings::mpfr;
+use super::mpfr;
 
 use std::ffi::{CStr, CString};
 use std::fmt;
 
-use super::super::algebra::matrix::Ring;
 use super::real::{Real, _GLOBAL_RND};
+use crate::algebra::matrix::Ring;
 
 impl std::str::FromStr for Real {
     // 面倒なので省略

@@ -1,4 +1,4 @@
-use super::bindings::mpfr;
+use super::mpfr;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 

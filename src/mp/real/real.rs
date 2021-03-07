@@ -1,8 +1,8 @@
-use super::bindings::mpfr;
+use super::mpfr;
 
 use once_cell::sync::OnceCell;
 
-use super::super::algebra::matrix::Ring;
+use crate::algebra::matrix::Ring;
 
 pub type Precision = mpfr::mpfr_prec_t;
 pub type RoundMode = mpfr::mpfr_rnd_t;

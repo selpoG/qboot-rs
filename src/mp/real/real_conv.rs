@@ -1,4 +1,4 @@
-use super::bindings::mpfr;
+use super::mpfr;
 
 use super::real::{Long, Real, ULong, _GLOBAL_RND};
 
