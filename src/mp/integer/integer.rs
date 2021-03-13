@@ -1,6 +1,8 @@
 use super::gmp;
 
 use std::ops::Add;
+pub type ULong = ::std::os::raw::c_ulong;
+pub type Long = ::std::os::raw::c_long;
 
 pub struct Integer {
     pub data: gmp::__mpz_struct,

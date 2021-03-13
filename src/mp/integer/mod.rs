@@ -6,5 +6,6 @@
 mod gmp;
 
 pub mod integer;
+mod integer_conv;
 
 pub use integer::*;
