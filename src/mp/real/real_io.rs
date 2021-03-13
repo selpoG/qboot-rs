@@ -61,16 +61,7 @@ impl fmt::Display for Real {
                 if ch == std::ptr::null_mut() {
                     Err(std::fmt::Error {})
                 } else {
-                    struct Guard {
-                        ch: *mut i8,
-                    }
-                    impl Drop for Guard {
-                        fn drop(&mut self) {
-                            unsafe { mpfr::mpfr_free_str(self.ch) }
-                        }
-                    }
-                    let mut _guard = Guard { ch: ch };
-                    match CStr::from_ptr(ch).to_str() {
+                    let ret = match CStr::from_ptr(ch).to_str() {
                         Ok(s) => {
                             let mut v = String::from(s);
                             if v.len() > 1 {
@@ -91,11 +82,12 @@ impl fmt::Display for Real {
                             if neg {
                                 v.insert(0, '-')
                             }
-                            let res = write!(f, "Real({})", v);
-                            res
+                            write!(f, "Real({})", v)
                         }
                         Err(_err) => Err(std::fmt::Error {}),
-                    }
+                    };
+                    mpfr::mpfr_free_str(ch);
+                    ret
                 }
             }
         }
