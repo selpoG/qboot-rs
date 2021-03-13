@@ -5,6 +5,7 @@ use std::io::stdin;
 use std::io::{stdout, Write};
 
 use qboot::algebra::matrix::Vector;
+use qboot::mp::integer::Integer;
 use qboot::mp::real::{Real, ULong};
 
 macro_rules! prompt {
@@ -18,6 +19,11 @@ fn cin<T: std::str::FromStr>() -> T {
 }
 
 fn main() {
+    let mut n = Integer::from(1 as ULong);
+    for i in 1..=100 {
+        n *= i as ULong;
+    }
+    println!("100! = {}", n);
     let mut t = Real::from(1.0);
     let mut s_d = Real::from(1.0);
     for i in 1..=100 {
