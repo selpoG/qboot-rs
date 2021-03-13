@@ -1,6 +1,5 @@
 use super::gmp;
 
-use std::ops::Add;
 pub type ULong = ::std::os::raw::c_ulong;
 pub type Long = ::std::os::raw::c_long;
 
@@ -29,17 +28,5 @@ impl Drop for Integer {
         if !self.data._mp_d.is_null() {
             unsafe { gmp::__gmpz_clear(&mut self.data) }
         }
-    }
-}
-
-impl Add for Integer {
-    type Output = Integer;
-
-    fn add(self, rhs: Integer) -> Integer {
-        let mut x = Integer::new();
-        unsafe {
-            gmp::__gmpz_add(&mut x.data, &self.data, &rhs.data);
-        }
-        x
     }
 }
