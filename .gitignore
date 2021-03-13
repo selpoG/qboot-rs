@@ -1,4 +1,4 @@
-/src/mp/integer/gmp.rs
+/src/mp/gmp.rs
 /src/mp/real/mpfr.rs
 
 # use mpir.h instead of gmp.h on Windows

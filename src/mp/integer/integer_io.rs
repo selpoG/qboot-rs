@@ -1,4 +1,4 @@
-use super::gmp;
+use super::super::gmp;
 
 use std::ffi::{CStr, CString};
 use std::fmt;

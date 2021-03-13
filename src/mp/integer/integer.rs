@@ -1,4 +1,4 @@
-use super::gmp;
+use super::super::gmp;
 
 pub type ULong = ::std::os::raw::c_ulong;
 pub type Long = ::std::os::raw::c_long;

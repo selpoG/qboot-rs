@@ -1,4 +1,4 @@
-use super::gmp;
+use super::super::gmp;
 
 use super::integer::{Integer, Long, ULong};
 

@@ -1,4 +1,4 @@
-use super::gmp;
+use super::super::gmp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
 
