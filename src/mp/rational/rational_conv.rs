@@ -3,41 +3,47 @@ use super::super::gmp;
 use super::super::integer::Integer;
 use super::rational::{Long, Rational, ULong};
 
+impl From<&Integer> for Rational {
+    fn from(from: &Integer) -> Rational {
+        let mut r = Rational::new();
+        unsafe {
+            gmp::__gmpq_set_z(&mut r.data, &from.data);
+        }
+        r
+    }
+}
 impl From<ULong> for Rational {
     fn from(from: ULong) -> Rational {
-        let mut x: gmp::__mpq_struct = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
+        let mut r = Rational::new();
         unsafe {
-            gmp::__gmpq_init(&mut x);
-            gmp::__gmpq_set_ui(&mut x, from, 1);
+            gmp::__gmpq_set_ui(&mut r.data, from, 1);
         }
-        Rational { data: x }
+        r
     }
 }
 impl From<Long> for Rational {
     fn from(from: Long) -> Rational {
-        let mut x: gmp::__mpq_struct = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
+        let mut r = Rational::new();
         unsafe {
-            gmp::__gmpq_init(&mut x);
-            gmp::__gmpq_set_si(&mut x, from, 1);
+            gmp::__gmpq_set_si(&mut r.data, from, 1);
         }
-        Rational { data: x }
+        r
     }
 }
 impl From<f64> for Rational {
     fn from(from: f64) -> Rational {
-        let mut x: gmp::__mpq_struct = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
+        let mut r = Rational::new();
         unsafe {
-            gmp::__gmpq_init(&mut x);
-            gmp::__gmpq_set_d(&mut x, from);
+            gmp::__gmpq_set_d(&mut r.data, from);
         }
-        Rational { data: x }
+        r
     }
 }
 
 impl From<&Rational> for Integer {
     fn from(from: &Rational) -> Integer {
         let mut n = Integer::new();
-        unsafe { gmp::__gmpz_cdiv_q(&mut n.data, &from.data._mp_num, &from.data._mp_den) };
+        unsafe { gmp::__gmpz_cdiv_q(&mut n.data, &from.data._mp_num, &from.data._mp_den) }
         n
     }
 }
