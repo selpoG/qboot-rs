@@ -1,149 +1,149 @@
-use super::super::gmp;
+use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 use super::rational::{Long, Rational, ULong};
 
-fn nummut(p: gmp::mpq_ptr) -> *mut gmp::__mpz_struct {
+fn nummut(p: mp::mpq_ptr) -> *mut mp::__mpz_struct {
     unsafe { &mut (*p)._mp_num }
 }
-fn denmut(p: gmp::mpq_ptr) -> *mut gmp::__mpz_struct {
+fn denmut(p: mp::mpq_ptr) -> *mut mp::__mpz_struct {
     unsafe { &mut (*p)._mp_den }
 }
-fn numref(p: gmp::mpq_srcptr) -> *const gmp::__mpz_struct {
+fn numref(p: mp::mpq_srcptr) -> *const mp::__mpz_struct {
     unsafe { &(*p)._mp_num }
 }
-fn denref(p: gmp::mpq_srcptr) -> *const gmp::__mpz_struct {
+fn denref(p: mp::mpq_srcptr) -> *const mp::__mpz_struct {
     unsafe { &(*p)._mp_den }
 }
 
-fn _add(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: gmp::mpq_srcptr) {
+fn _add(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: mp::mpq_srcptr) {
     unsafe {
-        gmp::__gmpq_add(target, op1, op2);
+        mp::__gmpq_add(target, op1, op2);
     }
 }
-fn _add_ui(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: ULong) {
+fn _add_ui(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: ULong) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpq_set(target, op1);
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpq_set(target, op1);
         }
-        gmp::__gmpz_addmul_ui(nummut(target), denref(op1), op2);
+        mp::__gmpz_addmul_ui(nummut(target), denref(op1), op2);
     }
 }
-fn _add_si(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: Long) {
+fn _add_si(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: Long) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpq_set(target, op1);
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpq_set(target, op1);
         }
         if op2 >= 0 {
-            gmp::__gmpz_addmul_ui(nummut(target), denref(op1), op2 as ULong);
+            mp::__gmpz_addmul_ui(nummut(target), denref(op1), op2 as ULong);
         } else {
-            gmp::__gmpz_submul_ui(nummut(target), denref(op1), -op2 as ULong);
+            mp::__gmpz_submul_ui(nummut(target), denref(op1), -op2 as ULong);
         }
     }
 }
 
-fn _mul(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: gmp::mpq_srcptr) {
+fn _mul(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: mp::mpq_srcptr) {
     unsafe {
-        gmp::__gmpq_mul(target, op1, op2);
+        mp::__gmpq_mul(target, op1, op2);
     }
 }
-fn _mul_ui(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: ULong) {
+fn _mul_ui(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: ULong) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpz_set(denmut(target), denref(op1));
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpz_set(denmut(target), denref(op1));
         }
-        gmp::__gmpz_mul_ui(nummut(target), numref(op1), op2);
-        gmp::__gmpq_canonicalize(target);
+        mp::__gmpz_mul_ui(nummut(target), numref(op1), op2);
+        mp::__gmpq_canonicalize(target);
     }
 }
-fn _mul_si(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: Long) {
+fn _mul_si(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: Long) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpz_set(denmut(target), denref(op1));
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpz_set(denmut(target), denref(op1));
         }
-        gmp::__gmpz_mul_si(nummut(target), numref(op1), op2);
-        gmp::__gmpq_canonicalize(target);
+        mp::__gmpz_mul_si(nummut(target), numref(op1), op2);
+        mp::__gmpq_canonicalize(target);
     }
 }
 
-fn _sub(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: gmp::mpq_srcptr) {
+fn _sub(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: mp::mpq_srcptr) {
     unsafe {
-        gmp::__gmpq_sub(target, op1, op2);
+        mp::__gmpq_sub(target, op1, op2);
     }
 }
-fn _sub_ui(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: ULong) {
+fn _sub_ui(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: ULong) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpq_set(target, op1);
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpq_set(target, op1);
         }
-        gmp::__gmpz_submul_ui(nummut(target), denref(op1), op2);
+        mp::__gmpz_submul_ui(nummut(target), denref(op1), op2);
     }
 }
-fn _sub_si(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: Long) {
+fn _sub_si(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: Long) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpq_set(target, op1);
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpq_set(target, op1);
         }
         if op2 >= 0 {
-            gmp::__gmpz_submul_ui(nummut(target), denref(op1), op2 as ULong);
+            mp::__gmpz_submul_ui(nummut(target), denref(op1), op2 as ULong);
         } else {
-            gmp::__gmpz_addmul_ui(nummut(target), denref(op1), -op2 as ULong);
+            mp::__gmpz_addmul_ui(nummut(target), denref(op1), -op2 as ULong);
         }
     }
 }
-fn _ui_sub(target: gmp::mpq_ptr, op1: ULong, op2: gmp::mpq_srcptr) {
+fn _ui_sub(target: mp::mpq_ptr, op1: ULong, op2: mp::mpq_srcptr) {
     _sub_ui(target, op2, op1);
     unsafe {
-        gmp::__gmpq_neg(target, target);
+        mp::__gmpq_neg(target, target);
     }
 }
-fn _si_sub(target: gmp::mpq_ptr, op1: Long, op2: gmp::mpq_srcptr) {
+fn _si_sub(target: mp::mpq_ptr, op1: Long, op2: mp::mpq_srcptr) {
     _sub_si(target, op2, op1);
     unsafe {
-        gmp::__gmpq_neg(target, target);
+        mp::__gmpq_neg(target, target);
     }
 }
 
-fn _div(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: gmp::mpq_srcptr) {
+fn _div(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: mp::mpq_srcptr) {
     unsafe {
-        gmp::__gmpq_div(target, op1, op2);
+        mp::__gmpq_div(target, op1, op2);
     }
 }
-fn _div_ui(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: ULong) {
+fn _div_ui(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: ULong) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpz_set(nummut(target), numref(op1));
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpz_set(nummut(target), numref(op1));
         }
-        gmp::__gmpz_mul_ui(denmut(target), denref(op1), op2);
-        gmp::__gmpq_canonicalize(target);
+        mp::__gmpz_mul_ui(denmut(target), denref(op1), op2);
+        mp::__gmpq_canonicalize(target);
     }
 }
-fn _div_si(target: gmp::mpq_ptr, op1: gmp::mpq_srcptr, op2: Long) {
+fn _div_si(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: Long) {
     unsafe {
-        if target as gmp::mpq_srcptr != op1 {
-            gmp::__gmpz_set(nummut(target), numref(op1));
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpz_set(nummut(target), numref(op1));
         }
-        gmp::__gmpz_mul_si(denmut(target), denref(op1), op2);
-        gmp::__gmpq_canonicalize(target);
+        mp::__gmpz_mul_si(denmut(target), denref(op1), op2);
+        mp::__gmpq_canonicalize(target);
     }
 }
-fn _ui_div(target: gmp::mpq_ptr, op1: ULong, op2: gmp::mpq_srcptr) {
+fn _ui_div(target: mp::mpq_ptr, op1: ULong, op2: mp::mpq_srcptr) {
     _div_ui(target, op2, op1);
     unsafe {
-        gmp::__gmpq_inv(target, target);
+        mp::__gmpq_inv(target, target);
     }
 }
-fn _si_div(target: gmp::mpq_ptr, op1: Long, op2: gmp::mpq_srcptr) {
+fn _si_div(target: mp::mpq_ptr, op1: Long, op2: mp::mpq_srcptr) {
     _div_si(target, op2, op1);
     unsafe {
-        gmp::__gmpq_inv(target, target);
+        mp::__gmpq_inv(target, target);
     }
 }
 
 macro_rules! define_flipped {
     ($f: ident, $f2: ident, $T: ty) => {
-        fn $f2(target: gmp::mpq_ptr, op1: $T, op2: gmp::mpq_srcptr) {
+        fn $f2(target: mp::mpq_ptr, op1: $T, op2: mp::mpq_srcptr) {
             $f(target, op2, op1);
         }
     };

@@ -1,126 +1,126 @@
-use super::mpfr;
+use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 use super::real::{Long, Real, ULong, _GLOBAL_RND};
 
-fn _add(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: mpfr::mpfr_srcptr) {
+fn _add(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: mp::mpfr_srcptr) {
     unsafe {
-        mpfr::mpfr_add(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_add(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _add_ui(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: ULong) {
+fn _add_ui(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: ULong) {
     unsafe {
-        mpfr::mpfr_add_ui(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_add_ui(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _add_si(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: Long) {
+fn _add_si(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: Long) {
     unsafe {
-        mpfr::mpfr_add_si(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_add_si(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _add_d(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: f64) {
+fn _add_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
     unsafe {
-        mpfr::mpfr_add_d(target, op1, op2, _GLOBAL_RND);
-    }
-}
-
-fn _mul(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: mpfr::mpfr_srcptr) {
-    unsafe {
-        mpfr::mpfr_mul(target, op1, op2, _GLOBAL_RND);
-    }
-}
-fn _mul_ui(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: ULong) {
-    unsafe {
-        mpfr::mpfr_mul_ui(target, op1, op2, _GLOBAL_RND);
-    }
-}
-fn _mul_si(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: Long) {
-    unsafe {
-        mpfr::mpfr_mul_si(target, op1, op2, _GLOBAL_RND);
-    }
-}
-fn _mul_d(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: f64) {
-    unsafe {
-        mpfr::mpfr_mul_d(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_add_d(target, op1, op2, _GLOBAL_RND);
     }
 }
 
-fn _sub(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: mpfr::mpfr_srcptr) {
+fn _mul(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: mp::mpfr_srcptr) {
     unsafe {
-        mpfr::mpfr_sub(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_mul(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _sub_ui(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: ULong) {
+fn _mul_ui(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: ULong) {
     unsafe {
-        mpfr::mpfr_sub_ui(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_mul_ui(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _sub_si(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: Long) {
+fn _mul_si(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: Long) {
     unsafe {
-        mpfr::mpfr_sub_si(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_mul_si(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _sub_d(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: f64) {
+fn _mul_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
     unsafe {
-        mpfr::mpfr_sub_d(target, op1, op2, _GLOBAL_RND);
-    }
-}
-fn _ui_sub(target: mpfr::mpfr_ptr, op1: ULong, op2: mpfr::mpfr_srcptr) {
-    unsafe {
-        mpfr::mpfr_ui_sub(target, op1, op2, _GLOBAL_RND);
-    }
-}
-fn _si_sub(target: mpfr::mpfr_ptr, op1: Long, op2: mpfr::mpfr_srcptr) {
-    unsafe {
-        mpfr::mpfr_si_sub(target, op1, op2, _GLOBAL_RND);
-    }
-}
-fn _d_sub(target: mpfr::mpfr_ptr, op1: f64, op2: mpfr::mpfr_srcptr) {
-    unsafe {
-        mpfr::mpfr_d_sub(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_mul_d(target, op1, op2, _GLOBAL_RND);
     }
 }
 
-fn _div(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: mpfr::mpfr_srcptr) {
+fn _sub(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: mp::mpfr_srcptr) {
     unsafe {
-        mpfr::mpfr_div(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_sub(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _div_ui(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: ULong) {
+fn _sub_ui(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: ULong) {
     unsafe {
-        mpfr::mpfr_div_ui(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_sub_ui(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _div_si(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: Long) {
+fn _sub_si(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: Long) {
     unsafe {
-        mpfr::mpfr_div_si(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_sub_si(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _div_d(target: mpfr::mpfr_ptr, op1: mpfr::mpfr_srcptr, op2: f64) {
+fn _sub_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
     unsafe {
-        mpfr::mpfr_div_d(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_sub_d(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _ui_div(target: mpfr::mpfr_ptr, op1: ULong, op2: mpfr::mpfr_srcptr) {
+fn _ui_sub(target: mp::mpfr_ptr, op1: ULong, op2: mp::mpfr_srcptr) {
     unsafe {
-        mpfr::mpfr_ui_div(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_ui_sub(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _si_div(target: mpfr::mpfr_ptr, op1: Long, op2: mpfr::mpfr_srcptr) {
+fn _si_sub(target: mp::mpfr_ptr, op1: Long, op2: mp::mpfr_srcptr) {
     unsafe {
-        mpfr::mpfr_si_div(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_si_sub(target, op1, op2, _GLOBAL_RND);
     }
 }
-fn _d_div(target: mpfr::mpfr_ptr, op1: f64, op2: mpfr::mpfr_srcptr) {
+fn _d_sub(target: mp::mpfr_ptr, op1: f64, op2: mp::mpfr_srcptr) {
     unsafe {
-        mpfr::mpfr_d_div(target, op1, op2, _GLOBAL_RND);
+        mp::mpfr_d_sub(target, op1, op2, _GLOBAL_RND);
+    }
+}
+
+fn _div(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_div(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _div_ui(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: ULong) {
+    unsafe {
+        mp::mpfr_div_ui(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _div_si(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: Long) {
+    unsafe {
+        mp::mpfr_div_si(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _div_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
+    unsafe {
+        mp::mpfr_div_d(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _ui_div(target: mp::mpfr_ptr, op1: ULong, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_ui_div(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _si_div(target: mp::mpfr_ptr, op1: Long, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_si_div(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _d_div(target: mp::mpfr_ptr, op1: f64, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_d_div(target, op1, op2, _GLOBAL_RND);
     }
 }
 
 macro_rules! define_flipped {
     ($f: ident, $f2: ident, $T: ty) => {
-        fn $f2(target: mpfr::mpfr_ptr, op1: $T, op2: mpfr::mpfr_srcptr) {
+        fn $f2(target: mp::mpfr_ptr, op1: $T, op2: mp::mpfr_srcptr) {
             $f(target, op2, op1);
         }
     };

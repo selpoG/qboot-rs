@@ -1,136 +1,136 @@
-use super::super::gmp;
+use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
 
 use super::integer::{Integer, Long, ULong};
 
-fn _add(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: gmp::mpz_srcptr) {
+fn _add(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: mp::mpz_srcptr) {
     unsafe {
-        gmp::__gmpz_add(target, op1, op2);
+        mp::__gmpz_add(target, op1, op2);
     }
 }
-fn _add_ui(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: ULong) {
+fn _add_ui(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: ULong) {
     unsafe {
-        gmp::__gmpz_add_ui(target, op1, op2);
+        mp::__gmpz_add_ui(target, op1, op2);
     }
 }
-fn _add_si(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: Long) {
+fn _add_si(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: Long) {
     unsafe {
         if op2 >= 0 {
-            gmp::__gmpz_add_ui(target, op1, op2 as ULong);
+            mp::__gmpz_add_ui(target, op1, op2 as ULong);
         } else {
-            gmp::__gmpz_sub_ui(target, op1, -op2 as ULong);
+            mp::__gmpz_sub_ui(target, op1, -op2 as ULong);
         }
     }
 }
 
-fn _mul(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: gmp::mpz_srcptr) {
+fn _mul(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: mp::mpz_srcptr) {
     unsafe {
-        gmp::__gmpz_mul(target, op1, op2);
+        mp::__gmpz_mul(target, op1, op2);
     }
 }
-fn _mul_ui(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: ULong) {
+fn _mul_ui(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: ULong) {
     unsafe {
-        gmp::__gmpz_mul_ui(target, op1, op2);
+        mp::__gmpz_mul_ui(target, op1, op2);
     }
 }
-fn _mul_si(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: Long) {
+fn _mul_si(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: Long) {
     unsafe {
-        gmp::__gmpz_mul_si(target, op1, op2);
+        mp::__gmpz_mul_si(target, op1, op2);
     }
 }
 
-fn _sub(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: gmp::mpz_srcptr) {
+fn _sub(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: mp::mpz_srcptr) {
     unsafe {
-        gmp::__gmpz_sub(target, op1, op2);
+        mp::__gmpz_sub(target, op1, op2);
     }
 }
-fn _sub_ui(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: ULong) {
+fn _sub_ui(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: ULong) {
     unsafe {
-        gmp::__gmpz_sub_ui(target, op1, op2);
+        mp::__gmpz_sub_ui(target, op1, op2);
     }
 }
-fn _sub_si(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: Long) {
+fn _sub_si(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: Long) {
     unsafe {
         if op2 >= 0 {
-            gmp::__gmpz_sub_ui(target, op1, op2 as ULong);
+            mp::__gmpz_sub_ui(target, op1, op2 as ULong);
         } else {
-            gmp::__gmpz_add_ui(target, op1, -op2 as ULong);
+            mp::__gmpz_add_ui(target, op1, -op2 as ULong);
         }
     }
 }
-fn _ui_sub(target: gmp::mpz_ptr, op1: ULong, op2: gmp::mpz_srcptr) {
+fn _ui_sub(target: mp::mpz_ptr, op1: ULong, op2: mp::mpz_srcptr) {
     unsafe {
-        gmp::__gmpz_ui_sub(target, op1, op2);
+        mp::__gmpz_ui_sub(target, op1, op2);
     }
 }
-fn _si_sub(target: gmp::mpz_ptr, op1: Long, op2: gmp::mpz_srcptr) {
+fn _si_sub(target: mp::mpz_ptr, op1: Long, op2: mp::mpz_srcptr) {
     unsafe {
         _sub_si(target, op2, op1);
-        gmp::__gmpz_neg(target, target);
+        mp::__gmpz_neg(target, target);
     }
 }
 
-fn _div(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: gmp::mpz_srcptr) {
+fn _div(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: mp::mpz_srcptr) {
     unsafe {
-        gmp::__gmpz_fdiv_q(target, op1, op2);
+        mp::__gmpz_fdiv_q(target, op1, op2);
     }
 }
-fn _div_ui(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: ULong) {
+fn _div_ui(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: ULong) {
     unsafe {
-        gmp::__gmpz_fdiv_q_ui(target, op1, op2);
+        mp::__gmpz_fdiv_q_ui(target, op1, op2);
     }
 }
-fn _ui_div(target: gmp::mpz_ptr, op1: ULong, op2: gmp::mpz_srcptr) {
+fn _ui_div(target: mp::mpz_ptr, op1: ULong, op2: mp::mpz_srcptr) {
     unsafe {
-        if gmp::__gmpz_cmp_ui(op2, 0) < 0 {
-            let mut x: gmp::__mpz_struct = std::mem::MaybeUninit::uninit().assume_init();
-            gmp::__gmpz_init_set(&mut x, op2);
-            gmp::__gmpz_neg(&mut x, &x);
+        if mp::__gmpz_cmp_ui(op2, 0) < 0 {
+            let mut x: mp::__mpz_struct = std::mem::MaybeUninit::uninit().assume_init();
+            mp::__gmpz_init_set(&mut x, op2);
+            mp::__gmpz_neg(&mut x, &x);
             _ui_div(target, op1, &x);
-            gmp::__gmpz_clear(&mut x);
-        } else if gmp::__gmpz_cmp_ui(op2, op1) > 0 {
-            gmp::__gmpz_set_ui(target, 0);
+            mp::__gmpz_clear(&mut x);
+        } else if mp::__gmpz_cmp_ui(op2, op1) > 0 {
+            mp::__gmpz_set_ui(target, 0);
         } else {
-            let op2 = gmp::__gmpz_get_ui(op2);
-            gmp::__gmpz_set_ui(target, op1 / op2);
+            let op2 = mp::__gmpz_get_ui(op2);
+            mp::__gmpz_set_ui(target, op1 / op2);
         }
     }
 }
 
-fn _rem(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: gmp::mpz_srcptr) {
+fn _rem(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: mp::mpz_srcptr) {
     unsafe {
-        gmp::__gmpz_fdiv_r(target, op1, op2);
+        mp::__gmpz_fdiv_r(target, op1, op2);
     }
 }
-fn _rem_ui(target: gmp::mpz_ptr, op1: gmp::mpz_srcptr, op2: ULong) {
+fn _rem_ui(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: ULong) {
     unsafe {
-        gmp::__gmpz_fdiv_r_ui(target, op1, op2);
+        mp::__gmpz_fdiv_r_ui(target, op1, op2);
     }
 }
-fn _ui_rem(target: gmp::mpz_ptr, op1: ULong, op2: gmp::mpz_srcptr) {
+fn _ui_rem(target: mp::mpz_ptr, op1: ULong, op2: mp::mpz_srcptr) {
     unsafe {
-        if gmp::__gmpz_cmp_ui(op2, op1) > 0 {
-            gmp::__gmpz_set_ui(target, op1);
+        if mp::__gmpz_cmp_ui(op2, op1) > 0 {
+            mp::__gmpz_set_ui(target, op1);
         } else {
-            let op2 = if gmp::__gmpz_cmp_ui(op2, 0) >= 0 {
-                gmp::__gmpz_get_ui(op2)
+            let op2 = if mp::__gmpz_cmp_ui(op2, 0) >= 0 {
+                mp::__gmpz_get_ui(op2)
             } else {
-                let mut x: gmp::__mpz_struct = std::mem::MaybeUninit::uninit().assume_init();
-                gmp::__gmpz_init_set(&mut x, op2);
-                gmp::__gmpz_neg(&mut x, &x);
-                let val = gmp::__gmpz_get_ui(&x);
-                gmp::__gmpz_clear(&mut x);
+                let mut x: mp::__mpz_struct = std::mem::MaybeUninit::uninit().assume_init();
+                mp::__gmpz_init_set(&mut x, op2);
+                mp::__gmpz_neg(&mut x, &x);
+                let val = mp::__gmpz_get_ui(&x);
+                mp::__gmpz_clear(&mut x);
                 val
             };
-            gmp::__gmpz_set_ui(target, op1 % op2);
+            mp::__gmpz_set_ui(target, op1 % op2);
         }
     }
 }
 
 macro_rules! define_flipped {
     ($f: ident, $f2: ident, $T: ty) => {
-        fn $f2(target: gmp::mpz_ptr, op1: $T, op2: gmp::mpz_srcptr) {
+        fn $f2(target: mp::mpz_ptr, op1: $T, op2: mp::mpz_srcptr) {
             $f(target, op2, op1);
         }
     };

@@ -24,8 +24,7 @@ Rewrite [qboot](https://github.com/selpoG/qboot) in `Rust`.
 2. Copy `libgmp.a` and `libmpfr.a` to `.`.
 3. Install `bindgen`: `cargo install bindgen`.
 4. Generate rust bindings by:
-   1. `bindgen src/mp/c/gmp_in.h > src/mp/gmp.rs`
-   2. `bindgen src/mp/c/mpfr_in.h > src/mp/real/mpfr.rs`
+   1. `bindgen src/mp/c/mp_in.h > src/mp/mp.rs`
 5. `RUSTFLAGS="-lgmp -lmpfr" cargo run`
 
 On Windows, use `mpir` instead of `gmp`, and `xxx.lib` instead of `libxxx.a`.

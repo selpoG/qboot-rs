@@ -1,4 +1,3 @@
 *
 !.gitignore
-!gmp_in.h
-!mpfr_in.h
+!mp_in.h

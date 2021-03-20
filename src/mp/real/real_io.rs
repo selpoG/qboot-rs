@@ -1,4 +1,4 @@
-use super::mpfr;
+use super::super::mp;
 
 use std::ffi::{CStr, CString};
 use std::fmt;
@@ -14,7 +14,7 @@ impl std::str::FromStr for Real {
         let c_str = CString::new(s).expect("CString::new failed");
         let mut x = Real::_nan();
         unsafe {
-            match mpfr::mpfr_set_str(&mut x.data, c_str.as_ptr(), 10, _GLOBAL_RND) {
+            match mp::mpfr_set_str(&mut x.data, c_str.as_ptr(), 10, _GLOBAL_RND) {
                 -1 => Err(()),
                 _ => Ok(x),
             }
@@ -40,17 +40,17 @@ impl fmt::Display for Real {
             }
         } else {
             let mut x = self.clone();
-            let mut exp: mpfr::mpfr_exp_t = 0;
-            let exp_ptr: *mut mpfr::mpfr_exp_t = &mut exp;
-            let prec: mpfr::size_t = 6 + 1;
+            let mut exp: mp::mpfr_exp_t = 0;
+            let exp_ptr: *mut mp::mpfr_exp_t = &mut exp;
+            let prec: mp::size_t = 6 + 1;
             let base: i32 = 10;
             unsafe {
                 let sgn = x.sgn();
                 let neg = sgn < 0;
                 if neg {
-                    mpfr::mpfr_neg(&mut x.data, &x.data, _GLOBAL_RND);
+                    mp::mpfr_neg(&mut x.data, &x.data, _GLOBAL_RND);
                 }
-                let ch = mpfr::mpfr_get_str(
+                let ch = mp::mpfr_get_str(
                     std::ptr::null_mut(),
                     exp_ptr,
                     base,
@@ -86,7 +86,7 @@ impl fmt::Display for Real {
                         }
                         Err(_err) => Err(std::fmt::Error {}),
                     };
-                    mpfr::mpfr_free_str(ch);
+                    mp::mpfr_free_str(ch);
                     ret
                 }
             }
