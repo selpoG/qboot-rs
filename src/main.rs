@@ -6,6 +6,7 @@ use std::io::{stdout, Write};
 
 use qboot::algebra::matrix::Vector;
 use qboot::mp::integer::Integer;
+use qboot::mp::rational::Rational;
 use qboot::mp::real::{Real, ULong};
 
 macro_rules! prompt {
@@ -24,6 +25,15 @@ fn main() {
         n *= i as ULong;
     }
     println!("100! = {}", n);
+
+    let mut t = Rational::from(1.0);
+    let mut s_d = Rational::from(1.0);
+    for i in 1..=10 {
+        t *= i as ULong;
+        s_d += 1 as ULong / &t;
+    }
+    println!("Sum is {}", s_d);
+
     let mut t = Real::from(1.0);
     let mut s_d = Real::from(1.0);
     for i in 1..=100 {
