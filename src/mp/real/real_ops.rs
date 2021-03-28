@@ -2,7 +2,7 @@ use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
-use super::super::{Long, ULong};
+use super::super::{Integer, Long, Rational, ULong};
 use super::real::{Real, _GLOBAL_RND};
 
 fn _add(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: mp::mpfr_srcptr) {
@@ -23,6 +23,16 @@ fn _add_si(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: Long) {
 fn _add_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
     unsafe {
         mp::mpfr_add_d(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _add_z(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Integer) {
+    unsafe {
+        mp::mpfr_add_z(target, op1, &op2.data, _GLOBAL_RND);
+    }
+}
+fn _add_q(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Rational) {
+    unsafe {
+        mp::mpfr_add_q(target, op1, &op2.data, _GLOBAL_RND);
     }
 }
 
@@ -46,6 +56,16 @@ fn _mul_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
         mp::mpfr_mul_d(target, op1, op2, _GLOBAL_RND);
     }
 }
+fn _mul_z(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Integer) {
+    unsafe {
+        mp::mpfr_mul_z(target, op1, &op2.data, _GLOBAL_RND);
+    }
+}
+fn _mul_q(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Rational) {
+    unsafe {
+        mp::mpfr_mul_q(target, op1, &op2.data, _GLOBAL_RND);
+    }
+}
 
 fn _sub(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: mp::mpfr_srcptr) {
     unsafe {
@@ -67,6 +87,16 @@ fn _sub_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
         mp::mpfr_sub_d(target, op1, op2, _GLOBAL_RND);
     }
 }
+fn _sub_z(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Integer) {
+    unsafe {
+        mp::mpfr_sub_z(target, op1, &op2.data, _GLOBAL_RND);
+    }
+}
+fn _sub_q(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Rational) {
+    unsafe {
+        mp::mpfr_sub_q(target, op1, &op2.data, _GLOBAL_RND);
+    }
+}
 fn _ui_sub(target: mp::mpfr_ptr, op1: ULong, op2: mp::mpfr_srcptr) {
     unsafe {
         mp::mpfr_ui_sub(target, op1, op2, _GLOBAL_RND);
@@ -80,6 +110,17 @@ fn _si_sub(target: mp::mpfr_ptr, op1: Long, op2: mp::mpfr_srcptr) {
 fn _d_sub(target: mp::mpfr_ptr, op1: f64, op2: mp::mpfr_srcptr) {
     unsafe {
         mp::mpfr_d_sub(target, op1, op2, _GLOBAL_RND);
+    }
+}
+fn _z_sub(target: mp::mpfr_ptr, op1: &Integer, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_z_sub(target, &op1.data, op2, _GLOBAL_RND);
+    }
+}
+fn _q_sub(target: mp::mpfr_ptr, op1: &Rational, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_sub_q(target, op2, &op1.data, _GLOBAL_RND);
+        mp::mpfr_neg(target, target, _GLOBAL_RND);
     }
 }
 
@@ -103,6 +144,16 @@ fn _div_d(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: f64) {
         mp::mpfr_div_d(target, op1, op2, _GLOBAL_RND);
     }
 }
+fn _div_z(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Integer) {
+    unsafe {
+        mp::mpfr_div_z(target, op1, &op2.data, _GLOBAL_RND);
+    }
+}
+fn _div_q(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: &Rational) {
+    unsafe {
+        mp::mpfr_div_q(target, op1, &op2.data, _GLOBAL_RND);
+    }
+}
 fn _ui_div(target: mp::mpfr_ptr, op1: ULong, op2: mp::mpfr_srcptr) {
     unsafe {
         mp::mpfr_ui_div(target, op1, op2, _GLOBAL_RND);
@@ -117,6 +168,18 @@ fn _d_div(target: mp::mpfr_ptr, op1: f64, op2: mp::mpfr_srcptr) {
     unsafe {
         mp::mpfr_d_div(target, op1, op2, _GLOBAL_RND);
     }
+}
+fn _z_div(target: mp::mpfr_ptr, op1: &Integer, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_ui_div(target, 1 as ULong, op2, _GLOBAL_RND);
+    }
+    _mul_z(target, target, op1)
+}
+fn _q_div(target: mp::mpfr_ptr, op1: &Rational, op2: mp::mpfr_srcptr) {
+    unsafe {
+        mp::mpfr_ui_div(target, 1 as ULong, op2, _GLOBAL_RND);
+    }
+    _mul_q(target, target, op1)
 }
 
 macro_rules! define_flipped {
@@ -246,10 +309,14 @@ macro_rules! define_subdiv {
 define_addmul!(_add_ui, _ui_add, _mul_ui, _ui_mul, ULong);
 define_addmul!(_add_si, _si_add, _mul_si, _si_mul, Long);
 define_addmul!(_add_d, _d_add, _mul_d, _d_mul, f64);
+define_addmul!(_add_z, _z_add, _mul_z, _z_mul, &Integer);
+define_addmul!(_add_q, _q_add, _mul_q, _q_mul, &Rational);
 
 define_subdiv!(_sub_ui, _ui_sub, _div_ui, _ui_div, ULong);
 define_subdiv!(_sub_si, _si_sub, _div_si, _si_div, Long);
 define_subdiv!(_sub_d, _d_sub, _div_d, _d_div, f64);
+define_subdiv!(_sub_z, _z_sub, _div_z, _z_div, &Integer);
+define_subdiv!(_sub_q, _q_sub, _div_q, _q_div, &Rational);
 
 // Op: Add, Sub, Mul, Div
 // op_name: add, sub, mul, div
