@@ -2,7 +2,8 @@ use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
 
-use super::integer::{Integer, Long, ULong};
+use super::super::{Long, ULong};
+use super::integer::Integer;
 
 fn _add(target: mp::mpz_ptr, op1: mp::mpz_srcptr, op2: mp::mpz_srcptr) {
     unsafe {

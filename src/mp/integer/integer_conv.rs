@@ -1,6 +1,7 @@
 use super::super::mp;
 
-use super::integer::{Integer, Long, ULong};
+use super::super::{Long, ULong};
+use super::integer::Integer;
 
 impl From<ULong> for Integer {
     fn from(from: ULong) -> Integer {

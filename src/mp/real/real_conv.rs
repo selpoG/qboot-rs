@@ -1,8 +1,7 @@
 use super::super::mp;
 
-use super::super::integer::Integer;
-use super::super::rational::Rational;
-use super::real::{Long, Real, ULong, _GLOBAL_RND};
+use super::super::{Integer, Long, Rational, ULong};
+use super::real::{Real, _GLOBAL_RND};
 
 impl From<&Integer> for Real {
     fn from(from: &Integer) -> Real {

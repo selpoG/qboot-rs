@@ -1,9 +1,7 @@
 use super::super::mp;
 
-use super::super::integer::Integer;
-
-pub type ULong = ::std::os::raw::c_ulong;
-pub type Long = ::std::os::raw::c_long;
+use super::super::Integer;
+use super::super::{Long, ULong};
 
 pub struct Rational {
     pub data: mp::__mpq_struct,

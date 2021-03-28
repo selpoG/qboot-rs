@@ -2,12 +2,11 @@ use super::super::mp;
 
 use once_cell::sync::OnceCell;
 
+use super::super::ULong;
 use crate::algebra::matrix::Ring;
 
 pub type Precision = mp::mpfr_prec_t;
 pub type RoundMode = mp::mpfr_rnd_t;
-pub type ULong = mp::mpfr_ulong;
-pub type Long = mp::mpfr_long;
 pub type UIntMax = mp::uintmax_t;
 pub type IntMax = mp::intmax_t;
 

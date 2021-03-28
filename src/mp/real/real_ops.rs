@@ -2,7 +2,8 @@ use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
-use super::real::{Long, Real, ULong, _GLOBAL_RND};
+use super::super::{Long, ULong};
+use super::real::{Real, _GLOBAL_RND};
 
 fn _add(target: mp::mpfr_ptr, op1: mp::mpfr_srcptr, op2: mp::mpfr_srcptr) {
     unsafe {

@@ -2,7 +2,8 @@ use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
-use super::rational::{Long, Rational, ULong};
+use super::super::{Long, ULong};
+use super::rational::Rational;
 
 fn nummut(p: mp::mpq_ptr) -> *mut mp::__mpz_struct {
     unsafe { &mut (*p)._mp_num }

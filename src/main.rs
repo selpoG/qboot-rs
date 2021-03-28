@@ -5,9 +5,7 @@ use std::io::stdin;
 use std::io::{stdout, Write};
 
 use qboot::algebra::matrix::Vector;
-use qboot::mp::integer::Integer;
-use qboot::mp::rational::Rational;
-use qboot::mp::real::{Real, ULong};
+use qboot::mp::{Integer, Rational, Real, ULong};
 
 macro_rules! prompt {
     ($($arg:tt)*) => (print!($($arg)*); stdout().flush().unwrap());

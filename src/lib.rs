@@ -4,7 +4,7 @@ pub mod mp;
 #[cfg(test)]
 mod tests {
     use super::algebra::matrix::Vector;
-    use super::mp::real::Real;
+    use super::mp::Real;
     #[test]
     fn sample() {
         let _vec: Vector<Real> = Vector::new(10);

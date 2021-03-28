@@ -1,8 +1,5 @@
 use super::super::mp;
 
-pub type ULong = ::std::os::raw::c_ulong;
-pub type Long = ::std::os::raw::c_long;
-
 pub struct Integer {
     pub data: mp::__mpz_struct,
 }

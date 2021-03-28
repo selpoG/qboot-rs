@@ -5,6 +5,13 @@
 #[allow(non_upper_case_globals)]
 mod mp;
 
+pub type ULong = ::std::os::raw::c_ulong;
+pub type Long = ::std::os::raw::c_long;
+
 pub mod integer;
 pub mod rational;
 pub mod real;
+
+pub use integer::Integer;
+pub use rational::Rational;
+pub use real::Real;

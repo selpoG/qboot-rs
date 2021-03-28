@@ -1,7 +1,8 @@
 use super::super::mp;
 
-use super::super::integer::Integer;
-use super::rational::{Long, Rational, ULong};
+use super::super::Integer;
+use super::super::{Long, ULong};
+use super::rational::Rational;
 
 impl From<&Integer> for Rational {
     fn from(from: &Integer) -> Rational {
