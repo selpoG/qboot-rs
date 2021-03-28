@@ -2,7 +2,7 @@ use super::super::mp;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
-use super::super::{Long, ULong};
+use super::super::{Integer, Long, ULong};
 use super::rational::Rational;
 
 fn nummut(p: mp::mpq_ptr) -> *mut mp::__mpz_struct {
@@ -43,6 +43,14 @@ fn _add_si(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: Long) {
         }
     }
 }
+fn _add_z(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: &Integer) {
+    unsafe {
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpq_set(target, op1);
+        }
+        mp::__gmpz_addmul(nummut(target), denref(op1), &op2.data);
+    }
+}
 
 fn _mul(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: mp::mpq_srcptr) {
     unsafe {
@@ -64,6 +72,15 @@ fn _mul_si(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: Long) {
             mp::__gmpz_set(denmut(target), denref(op1));
         }
         mp::__gmpz_mul_si(nummut(target), numref(op1), op2);
+        mp::__gmpq_canonicalize(target);
+    }
+}
+fn _mul_z(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: &Integer) {
+    unsafe {
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpz_set(denmut(target), denref(op1));
+        }
+        mp::__gmpz_mul(nummut(target), numref(op1), &op2.data);
         mp::__gmpq_canonicalize(target);
     }
 }
@@ -105,6 +122,20 @@ fn _si_sub(target: mp::mpq_ptr, op1: Long, op2: mp::mpq_srcptr) {
         mp::__gmpq_neg(target, target);
     }
 }
+fn _sub_z(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: &Integer) {
+    unsafe {
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpq_set(target, op1);
+        }
+        mp::__gmpz_submul(nummut(target), denref(op1), &op2.data);
+    }
+}
+fn _z_sub(target: mp::mpq_ptr, op1: &Integer, op2: mp::mpq_srcptr) {
+    _sub_z(target, op2, op1);
+    unsafe {
+        mp::__gmpq_neg(target, target);
+    }
+}
 
 fn _div(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: mp::mpq_srcptr) {
     unsafe {
@@ -137,6 +168,21 @@ fn _ui_div(target: mp::mpq_ptr, op1: ULong, op2: mp::mpq_srcptr) {
 }
 fn _si_div(target: mp::mpq_ptr, op1: Long, op2: mp::mpq_srcptr) {
     _div_si(target, op2, op1);
+    unsafe {
+        mp::__gmpq_inv(target, target);
+    }
+}
+fn _div_z(target: mp::mpq_ptr, op1: mp::mpq_srcptr, op2: &Integer) {
+    unsafe {
+        if target as mp::mpq_srcptr != op1 {
+            mp::__gmpz_set(nummut(target), numref(op1));
+        }
+        mp::__gmpz_mul(denmut(target), denref(op1), &op2.data);
+        mp::__gmpq_canonicalize(target);
+    }
+}
+fn _z_div(target: mp::mpq_ptr, op1: &Integer, op2: mp::mpq_srcptr) {
+    _div_z(target, op2, op1);
     unsafe {
         mp::__gmpq_inv(target, target);
     }
@@ -268,9 +314,11 @@ macro_rules! define_subdiv {
 
 define_addmul!(_add_ui, _ui_add, _mul_ui, _ui_mul, ULong);
 define_addmul!(_add_si, _si_add, _mul_si, _si_mul, Long);
+define_addmul!(_add_z, _z_add, _mul_z, _z_mul, &Integer);
 
 define_subdiv!(_sub_ui, _ui_sub, _div_ui, _ui_div, ULong);
 define_subdiv!(_sub_si, _si_sub, _div_si, _si_div, Long);
+define_subdiv!(_sub_z, _z_sub, _div_z, _z_div, &Integer);
 
 // Op: Add, Sub, Mul, Div
 // op_name: add, sub, mul, div
