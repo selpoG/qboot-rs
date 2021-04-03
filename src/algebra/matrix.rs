@@ -12,6 +12,9 @@ pub trait Ring: Clone {
     fn zero() -> Self;
     fn iszero(&self) -> bool;
     fn _add(&self, rhs: &Self) -> Self;
+    fn _iadd(&mut self, rhs: &Self);
+    fn _isub(&mut self, rhs: &Self);
+    fn _neg(&self) -> Self;
 }
 impl Ring for f64 {
     fn zero() -> f64 {
@@ -23,6 +26,15 @@ impl Ring for f64 {
     fn _add(&self, rhs: &Self) -> Self {
         *self + *rhs
     }
+    fn _iadd(&mut self, rhs: &Self) {
+        *self += rhs
+    }
+    fn _isub(&mut self, rhs: &Self) {
+        *self *= rhs
+    }
+    fn _neg(&self) -> Self {
+        -*self
+    }
 }
 impl Ring for f32 {
     fn zero() -> f32 {
@@ -33,6 +45,15 @@ impl Ring for f32 {
     }
     fn _add(&self, rhs: &Self) -> Self {
         *self + *rhs
+    }
+    fn _iadd(&mut self, rhs: &Self) {
+        *self += rhs
+    }
+    fn _isub(&mut self, rhs: &Self) {
+        *self *= rhs
+    }
+    fn _neg(&self) -> Self {
+        -*self
     }
 }
 impl<T> Ring for Vector<T>
@@ -56,6 +77,28 @@ where
         let mut arr: Vec<T> = Vec::with_capacity(dim);
         for i in 0..dim {
             arr.push(self.arr[i]._add(&rhs.arr[i]));
+        }
+        Vector {
+            arr: arr.into_boxed_slice(),
+        }
+    }
+    fn _iadd(&mut self, rhs: &Self) {
+        assert_eq!(self.dim(), rhs.dim());
+        for i in 0..self.dim() {
+            self.arr[i]._iadd(&rhs.arr[i]);
+        }
+    }
+    fn _isub(&mut self, rhs: &Self) {
+        assert_eq!(self.dim(), rhs.dim());
+        for i in 0..self.dim() {
+            self.arr[i]._isub(&rhs.arr[i]);
+        }
+    }
+    fn _neg(&self) -> Self {
+        let dim = self.dim();
+        let mut arr: Vec<T> = Vec::with_capacity(dim);
+        for i in 0..dim {
+            arr.push(self.arr[i]._neg());
         }
         Vector {
             arr: arr.into_boxed_slice(),

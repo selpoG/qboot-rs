@@ -8,6 +8,7 @@ mod mp;
 pub type ULong = ::std::os::raw::c_ulong;
 pub type Long = ::std::os::raw::c_long;
 
+mod base;
 pub mod integer;
 pub mod rational;
 pub mod real;

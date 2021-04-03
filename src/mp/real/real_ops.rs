@@ -1,6 +1,6 @@
 use super::super::mp;
 
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use super::super::{Integer, Long, Rational, ULong};
 use super::real::{Real, _GLOBAL_RND};
@@ -382,3 +382,24 @@ define_realassign!(AddAssign, add_assign, _add);
 define_realassign!(MulAssign, mul_assign, _mul);
 define_realassign!(SubAssign, sub_assign, _sub);
 define_realassign!(DivAssign, div_assign, _div);
+
+impl Neg for &Real {
+    type Output = Real;
+    fn neg(self) -> Real {
+        let mut x = Real::new();
+        unsafe {
+            mp::mpfr_neg(&mut x.data, &self.data, _GLOBAL_RND);
+        }
+        x
+    }
+}
+
+impl Neg for Real {
+    type Output = Real;
+    fn neg(mut self) -> Real {
+        unsafe {
+            mp::mpfr_neg(&mut self.data, &self.data, _GLOBAL_RND);
+        }
+        self
+    }
+}

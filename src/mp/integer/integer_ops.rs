@@ -1,6 +1,8 @@
 use super::super::mp;
 
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
+use std::ops::{
+    Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign,
+};
 
 use super::super::{Long, ULong};
 use super::integer::Integer;
@@ -328,3 +330,20 @@ define_realassign!(MulAssign, mul_assign, _mul);
 define_realassign!(SubAssign, sub_assign, _sub);
 define_realassign!(DivAssign, div_assign, _div);
 define_realassign!(RemAssign, rem_assign, _rem);
+
+impl Neg for &Integer {
+    type Output = Integer;
+    fn neg(self) -> Integer {
+        let mut x = Integer::new();
+        unsafe { mp::__gmpz_neg(&mut x.data, &self.data) }
+        x
+    }
+}
+
+impl Neg for Integer {
+    type Output = Integer;
+    fn neg(mut self) -> Integer {
+        unsafe { mp::__gmpz_neg(&mut self.data, &self.data) }
+        self
+    }
+}

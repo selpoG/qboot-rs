@@ -1,6 +1,6 @@
 use super::super::mp;
 
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use super::super::{Integer, Long, ULong};
 use super::rational::Rational;
@@ -384,3 +384,20 @@ define_realassign!(AddAssign, add_assign, _add);
 define_realassign!(MulAssign, mul_assign, _mul);
 define_realassign!(SubAssign, sub_assign, _sub);
 define_realassign!(DivAssign, div_assign, _div);
+
+impl Neg for &Rational {
+    type Output = Rational;
+    fn neg(self) -> Rational {
+        let mut x = Rational::new();
+        unsafe { mp::__gmpq_neg(&mut x.data, &self.data) }
+        x
+    }
+}
+
+impl Neg for Rational {
+    type Output = Rational;
+    fn neg(mut self) -> Rational {
+        unsafe { mp::__gmpq_neg(&mut self.data, &self.data) }
+        self
+    }
+}

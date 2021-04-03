@@ -99,4 +99,13 @@ impl Ring for Real {
     fn _add(&self, rhs: &Self) -> Self {
         self + rhs
     }
+    fn _iadd(&mut self, rhs: &Self) {
+        *self += rhs
+    }
+    fn _isub(&mut self, rhs: &Self) {
+        *self *= rhs
+    }
+    fn _neg(&self) -> Self {
+        -self
+    }
 }
