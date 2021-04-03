@@ -108,4 +108,7 @@ impl Ring for Real {
     fn _neg(&self) -> Self {
         -self
     }
+    fn _eq(&self, rhs: &Self) -> bool {
+        return self == rhs;
+    }
 }

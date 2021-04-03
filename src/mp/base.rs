@@ -20,4 +20,7 @@ impl Ring for Long {
     fn _neg(&self) -> Self {
         -*self
     }
+    fn _eq(&self, rhs: &Self) -> bool {
+        *self == *rhs
+    }
 }

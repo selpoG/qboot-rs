@@ -1,5 +1,6 @@
 use super::super::mp;
 
+use std::cmp::Ordering;
 use std::ops::{
     Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign,
 };
@@ -339,11 +340,27 @@ impl Neg for &Integer {
         x
     }
 }
-
 impl Neg for Integer {
     type Output = Integer;
     fn neg(mut self) -> Integer {
         unsafe { mp::__gmpz_neg(&mut self.data, &self.data) }
         self
+    }
+}
+
+impl PartialEq for Integer {
+    fn eq(&self, other: &Self) -> bool {
+        self.cmp(other) == Ordering::Equal
+    }
+}
+impl Eq for Integer {}
+impl PartialOrd for Integer {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+impl Ord for Integer {
+    fn cmp(&self, other: &Self) -> Ordering {
+        unsafe { mp::__gmpz_cmp(&self.data, &other.data).cmp(&0) }
     }
 }

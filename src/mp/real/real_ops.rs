@@ -1,5 +1,6 @@
 use super::super::mp;
 
+use std::cmp::Ordering;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use super::super::{Integer, Long, Rational, ULong};
@@ -393,7 +394,6 @@ impl Neg for &Real {
         x
     }
 }
-
 impl Neg for Real {
     type Output = Real;
     fn neg(mut self) -> Real {
@@ -401,5 +401,22 @@ impl Neg for Real {
             mp::mpfr_neg(&mut self.data, &self.data, _GLOBAL_RND);
         }
         self
+    }
+}
+
+impl PartialEq for Real {
+    fn eq(&self, other: &Self) -> bool {
+        self.cmp(other) == Ordering::Equal
+    }
+}
+impl Eq for Real {}
+impl PartialOrd for Real {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+impl Ord for Real {
+    fn cmp(&self, other: &Self) -> Ordering {
+        unsafe { mp::mpfr_cmp(&self.data, &other.data).cmp(&0) }
     }
 }

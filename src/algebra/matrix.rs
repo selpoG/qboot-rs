@@ -15,6 +15,7 @@ pub trait Ring: Clone {
     fn _iadd(&mut self, rhs: &Self);
     fn _isub(&mut self, rhs: &Self);
     fn _neg(&self) -> Self;
+    fn _eq(&self, rhs: &Self) -> bool;
 }
 impl Ring for f64 {
     fn zero() -> f64 {
@@ -35,6 +36,9 @@ impl Ring for f64 {
     fn _neg(&self) -> Self {
         -*self
     }
+    fn _eq(&self, rhs: &Self) -> bool {
+        return *self == *rhs;
+    }
 }
 impl Ring for f32 {
     fn zero() -> f32 {
@@ -54,6 +58,9 @@ impl Ring for f32 {
     }
     fn _neg(&self) -> Self {
         -*self
+    }
+    fn _eq(&self, rhs: &Self) -> bool {
+        return *self == *rhs;
     }
 }
 impl<T> Ring for Vector<T>
@@ -103,6 +110,15 @@ where
         Vector {
             arr: arr.into_boxed_slice(),
         }
+    }
+    fn _eq(&self, rhs: &Self) -> bool {
+        assert_eq!(self.dim(), rhs.dim());
+        for i in 0..self.dim() {
+            if !self.arr[i]._eq(&rhs.arr[i]) {
+                return false;
+            }
+        }
+        true
     }
 }
 impl<T> Clone for Vector<T>

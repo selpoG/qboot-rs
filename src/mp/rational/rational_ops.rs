@@ -1,5 +1,6 @@
 use super::super::mp;
 
+use std::cmp::Ordering;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use super::super::{Integer, Long, ULong};
@@ -393,11 +394,27 @@ impl Neg for &Rational {
         x
     }
 }
-
 impl Neg for Rational {
     type Output = Rational;
     fn neg(mut self) -> Rational {
         unsafe { mp::__gmpq_neg(&mut self.data, &self.data) }
         self
+    }
+}
+
+impl PartialEq for Rational {
+    fn eq(&self, other: &Self) -> bool {
+        self.cmp(other) == Ordering::Equal
+    }
+}
+impl Eq for Rational {}
+impl PartialOrd for Rational {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+impl Ord for Rational {
+    fn cmp(&self, other: &Self) -> Ordering {
+        unsafe { mp::__gmpq_cmp(&self.data, &other.data).cmp(&0) }
     }
 }
